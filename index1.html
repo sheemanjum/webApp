@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashlytics</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap');
+    
+    /* Background and font */
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #f39c12 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite, fadeIn 1s ease-in;
+      color: #fff;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.4) 0%, transparent 60%),
+                  radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.4) 0%, transparent 60%),
+                  radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.4) 0%, transparent 60%),
+                  radial-gradient(circle at 60% 30%, rgba(0, 212, 170, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 10% 90%, rgba(255, 107, 107, 0.3) 0%, transparent 50%);
+      animation: backgroundPulse 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    h1 {
+      font-family: 'Arial', sans-serif;
+      font-size: 3.5rem;
+      margin-bottom: 30px;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      animation: fadeIn 1s ease-in;
+      position: relative;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    @keyframes textGradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      25% { background-position: 25% 50%; }
+      50% { background-position: 50% 50%; }
+      75% { background-position: 75% 50%; }
+    }
+
+
+    @keyframes backgroundPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    p {
+      font-family: 'Helvetica', sans-serif;
+      font-size: 1.4rem;
+      margin: 15px 0;
+      opacity: 1;
+      font-weight: 400;
+      color: #f8f9fa;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+      letter-spacing: 0.5px;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    p:nth-child(3) { animation-delay: 0.3s; }
+    p:nth-child(4) { animation-delay: 0.6s; }
+    p:nth-child(5) { animation-delay: 0.9s; }
+
+
+    /* Buttons */
+    .btn {
+      font-family: 'Arial', sans-serif;
+      background: #e94560;
+      color: #ffffff;
+      padding: 12px 24px;
+      margin: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 400;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    @keyframes buttonFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+
+
+
+    .btn:hover {
+      background: #d73650;
+    }
+
+    .btn:active {
+      background: #c12e47;
+    }
+
+
+
+
+    /* File input styling */
+    input[type="file"] {
+      margin-top: 15px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      color: #fff;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    #file-info {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 10px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Footer small button */
+    .footer-btn {
+      font-family: 'Arial', sans-serif;
+      margin-top: 30px;
+      background: #f39c12;
+      color: #ffffff;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 400;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+
+
+
+    .footer-btn:hover {
+      background: #e08e0b;
+    }
+
+
+    /* Container styling */
+    .main-container {
+      position: relative;
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+
+
+    /* Chart examples */
+    .chart-examples {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .chart-item {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .chart-item:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .chart-image {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .chart-item p {
+      margin: 10px 0 0 0;
+      font-size: 0.9rem;
+      color: #f8f9fa;
+    }
+
+    /* Button container */
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 20px;
+        margin: 10px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      p {
+        font-size: 1.2rem;
+        margin: 10px 0;
+      }
+
+      .chart-examples {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        margin: 5px;
+      }
+
+      .footer-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+        letter-spacing: 1px;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      .chart-examples {
+        grid-template-columns: 1fr;
+      }
+
+      .button-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 200px;
+      }
+
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Results Section Styling */
+    .results-section {
+      margin-top: 40px;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    .results-section h2 {
+      font-family: 'Arial', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .result-card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .result-card:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .result-card h3 {
+      font-family: 'Arial', sans-serif;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      color: #f8f9fa;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    .result-card p {
+      font-size: 1rem;
+      line-height: 1.5;
+      margin: 10px 0;
+      color: #e9ecef;
+    }
+
+    .result-highlight {
+      background: rgba(233, 69, 96, 0.2);
+      padding: 10px;
+      border-radius: 5px;
+      border-left: 4px solid #e94560;
+      margin: 10px 0;
+    }
+
+    /* Floating particles */
+    .particle {
+      position: absolute;
+      background: rgba(233, 69, 96, 0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: simpleFloat 6s linear infinite;
+    }
+
+    .particle:nth-child(odd) {
+      background: linear-gradient(45deg, rgba(0, 212, 170, 0.3), rgba(255, 107, 107, 0.2), rgba(78, 205, 196, 0.3));
+    }
+
+    @keyframes simpleFloat {
+      0% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-10vh);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <h1>✨ Welcome to Dashlytics 📊</h1>
+
+    <p>📊 Transform your data into dynamic interactive dashboards</p>
+    <p>🔍 Uncover meaningful insights & predict future trends with precision</p>
+    <p>💡 Drive smarter data-driven decisions through Dashlytics</p>
+
+    <!-- Upload Dataset -->
+    <input type="file" id="upload" accept=".csv, .xlsx" style="display: none;">
+    <button class="btn" id="upload-btn">📁 Upload Dataset</button>
+    <div id="file-info" style="margin: 15px 0; font-size: 1rem; opacity: 0.9;"></div>
+
+    <!-- Chart Examples -->
+    <div class="chart-examples">
+      <div class="chart-item">
+        <img src="barchart.png" alt="Bar Chart Example" class="chart-image">
+        <p>📊 Bar Chart</p>
+      </div>
+      <div class="chart-item">
+        <img src="linechart.png" alt="Line Chart Example" class="chart-image">
+        <p>📈 Line Chart</p>
+      </div>
+      <div class="chart-item">
+        <img src="piechart.png" alt="Pie Chart Example" class="chart-image">
+        <p>🥧 Pie Chart</p>
+      </div>
+      <div class="chart-item">
+        <img src="histogram.png" alt="Histogram Example" class="chart-image">
+        <p>📉 Histogram</p>
+      </div>
+      <div class="chart-item">
+        <img src="scatterplot.png" alt="Scatter Plot Example" class="chart-image">
+        <p>🔵 Scatter Plot</p>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="button-container">
+      <button class="btn" id="create-dashboard">📊 Create Dashboard</button>
+      <button class="btn" id="predict">🔮 Predict Data</button>
+      <button class="btn" id="insights">💡 Give Insights</button>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section" id="results-section" style="display: none;">
+      <h2>📊 Dashboard Results</h2>
+      <div class="results-grid">
+        <div class="result-card">
+          <h3>🔮 Predictions</h3>
+          <div id="prediction-results">
+            <p>No predictions available yet. Upload data and click "Predict Data" to see results.</p>
+          </div>
+        </div>
+        <div class="result-card">
+          <h3>💡 Insights</h3>
+          <div id="insights-results">
+            <p>No insights available yet. Upload data and click "Give Insights" to see results.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Explore More -->
+    <button class="footer-btn" id="explore">🌟 Explore More with Data</button>
+  </div>
+
+  <!-- Floating particles -->
+  <div class="particle" style="left: 10%; width: 4px; height: 4px; animation-delay: 0s;"></div>
+  <div class="particle" style="left: 20%; width: 6px; height: 6px; animation-delay: 2s;"></div>
+  <div class="particle" style="left: 30%; width: 3px; height: 3px; animation-delay: 4s;"></div>
+  <div class="particle" style="left: 40%; width: 5px; height: 5px; animation-delay: 6s;"></div>
+  <div class="particle" style="left: 50%; width: 4px; height: 4px; animation-delay: 1s;"></div>
+  <div class="particle" style="left: 60%; width: 6px; height: 6px; animation-delay: 3s;"></div>
+  <div class="particle" style="left: 70%; width: 3px; height: 3px; animation-delay: 5s;"></div>
+  <div class="particle" style="left: 80%; width: 5px; height: 5px; animation-delay: 7s;"></div>
+  <div class="particle" style="left: 90%; width: 4px; height: 4px; animation-delay: 2.5s;"></div>
+
+  <script>
+    let currentDataset = null;
+    let additionalDataset = null;
+
+
+    // File upload handling
+    document.getElementById("upload-btn").addEventListener("click", () => {
+      document.getElementById("upload").click();
+    });
+
+    document.getElementById("upload").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        document.getElementById("file-info").textContent = `📄 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+        parseDataset(file, 'primary');
+      }
+    });
+
+    // Parse CSV/Excel files
+    function parseDataset(file, type) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target.result;
+        let data;
+        
+        if (file.name.endsWith('.csv')) {
+          data = parseCSV(content);
+        } else {
+          alert('Please upload a CSV file for now. Excel support coming soon!');
+          return;
+        }
+        
+        if (type === 'primary') {
+          currentDataset = { name: file.name, data: data };
+        } else {
+          additionalDataset = { name: file.name, data: data };
+        }
+        
+        alert(`✅ Dataset "${file.name}" loaded successfully!\n${data.length} rows found.`);
+      };
+      reader.readAsText(file);
+    }
+
+    // Simple CSV parser
+    function parseCSV(content) {
+      const lines = content.trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim());
+      const data = [];
+      
+      for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',').map(v => v.trim());
+        const row = {};
+        headers.forEach((header, index) => {
+          const value = values[index];
+          // Try to convert to number if possible
+          row[header] = isNaN(value) ? value : parseFloat(value);
+        });
+        data.push(row);
+      }
+      
+      return data;
+    }
+
+    // Create dashboard with real data
+    document.getElementById("create-dashboard").addEventListener("click", () => {
+      if (!currentDataset) {
+        alert("⚠️ Please upload a dataset first!");
+        return;
+      }
+      
+      // Store dataset in localStorage for dashboard page
+      localStorage.setItem('dashlytics_dataset', JSON.stringify(currentDataset));
+      window.location.href = "dashboard.html";
+    });
+
+    // Predict functionality
+    document.getElementById("predict").addEventListener("click", () => {
+      if (!currentDataset) {
+        alert("⚠️ Please upload a dataset first!");
+        return;
+      }
+      
+      const data = currentDataset.data;
+      const numericColumns = Object.keys(data[0]).filter(key => 
+        typeof data[0][key] === 'number'
+      );
+      
+      if (numericColumns.length > 0) {
+        const avgValues = numericColumns.map(col => {
+          const avg = data.reduce((sum, row) => sum + (row[col] || 0), 0) / data.length;
+          return `<div class="result-highlight"><strong>${col}:</strong> ${avg.toFixed(2)} (average)</div>`;
+        }).join('');
+        
+        const predictionHTML = `
+          <div class="result-highlight">
+            <h4>📈 Trend Analysis</h4>
+            <p>Based on current data patterns, expect continued growth in key metrics.</p>
+          </div>
+          <h4>📊 Average Values:</h4>
+          ${avgValues}
+          <p><strong>Recommendation:</strong> Monitor these metrics closely for optimal performance.</p>
+        `;
+        
+        document.getElementById('prediction-results').innerHTML = predictionHTML;
+        document.getElementById('results-section').style.display = 'block';
+        document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+      } else {
+        alert("🔮 No numeric data found for predictions. Please upload a dataset with numerical values.");
+      }
+    });
+
+    // Insights button action
+    document.getElementById("insights").addEventListener("click", () => {
+      if (!currentDataset) {
+        alert("⚠️ Please upload a dataset first!");
+        return;
+      }
+      
+      const data = currentDataset.data;
+      const numericColumns = Object.keys(data[0]).filter(key => 
+        typeof data[0][key] === 'number'
+      );
+      const textColumns = Object.keys(data[0]).filter(key => 
+        typeof data[0][key] === 'string'
+      );
+      
+      const insightsHTML = `
+        <div class="result-highlight">
+          <h4>📊 Dataset Overview</h4>
+          <p><strong>Total Records:</strong> ${data.length}</p>
+          <p><strong>Total Columns:</strong> ${Object.keys(data[0]).length}</p>
+        </div>
+        <div class="result-highlight">
+          <h4>📋 Column Analysis</h4>
+          <p><strong>Numeric Columns:</strong> ${numericColumns.length} (${numericColumns.join(', ')})</p>
+          <p><strong>Text Columns:</strong> ${textColumns.length} (${textColumns.join(', ')})</p>
+        </div>
+        <div class="result-highlight">
+          <h4>🎯 Recommendations</h4>
+          <p>• Create visualizations to explore patterns and relationships</p>
+          <p>• Focus on numeric columns for trend analysis</p>
+          <p>• Use text columns for categorization and grouping</p>
+        </div>
+      `;
+      
+      document.getElementById('insights-results').innerHTML = insightsHTML;
+      document.getElementById('results-section').style.display = 'block';
+      document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Explore more data - load additional dataset
+    document.getElementById("explore").addEventListener("click", () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.csv,.xlsx';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          parseDataset(file, 'additional');
+        }
+      };
+      input.click();
+    });
+  </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashlytics Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298, #ff6a00);
+      color: #fff;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 2s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 20px 0;
+    }
+
+    /* Dashboard grid */
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      width: 90%;
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+
+    /* Chart cards */
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .chart-box {
+      height: 250px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    /* Back button */
+    .btn {
+      background: #00c9ff;
+      color: #fff;
+      padding: 12px 24px;
+      margin: 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .btn:hover {
+      background: #00eaff;
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📊 Dashlytics Dashboard</h1>
+
+  <div class="dashboard">
+    <div class="card">
+      <div class="chart-box">📊 Bar Chart</div>
+    </div>
+    <div class="card">
+      <div class="chart-box">📈 Line Chart</div>
+    </div>
+    <div class="card">
+      <div class="chart-box">🥧 Pie Chart</div>
+    </div>
+    <div class="card">
+      <div class="chart-box">📉 Histogram</div>
+    </div>
+    <div class="card">
+      <div class="chart-box">🔵 Scatter Plot</div>
+    </div>
+  </div>
+
+</body>
+</html>
+  
+
